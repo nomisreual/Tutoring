@@ -33,7 +33,7 @@ class UserRegistry:
 
     def add_user(self, user: User):
         if user.username in self.users.keys():
-            raise Exception
+            raise ValueError
         else:
             self.users[user.username] = user.password
 
@@ -41,10 +41,18 @@ class UserRegistry:
 class TestUserRegistry(unittest.TestCase):
     def test_registration_success(self):
         user_registry = UserRegistry()
-        user_registry.add_user(User(username="Pete"))
+        user_registry.add_user(User(username="Pete", password="qwerty"))
         self.assertEqual(len(user_registry.users),
                          1,
                          "Should be one user in the database")
+        self.assertIn("Pete", user_registry.users)  # better
+        # self.assertEqual(user_registry.users.get("Pete"), "1234") # bad bad test
+
+    def test_registration_duplication(self):
+        user_registry = UserRegistry()
+        user_registry.add_user(User(username="Pete", password="qwerty"))
+        with self.assertRaises(ValueError):
+            user_registry.add_user(User(username="Pete", password="qwerty"))
 
 
 if __name__ == "__main__":
