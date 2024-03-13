@@ -43,8 +43,8 @@ def users(usr: str):
     return f"Username: {user.username}, password: {user.password}"
 
 
-@app.route("/login/<usr>")
-def login(usr: str):
+@app.route("/login/<usr>/<passwd>")
+def login(usr: str, passwd: str):
     # logic
     return "You are now logged in."
 
