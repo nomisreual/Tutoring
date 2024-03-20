@@ -11,6 +11,9 @@ def test_hello(client):
 
 
 def test_register(client, app):
+    """
+    Test whether registration works.
+    """
     response = client.get("/register/simon")
 
     # Check whether the registration was a success:
@@ -20,6 +23,19 @@ def test_register(client, app):
 
     # Check the repsonse:
     assert b"Registered!" == response.data
+
+
+def test_register_check_username(client, app):
+    """
+    Test whether attempted registration is rejected in case a user
+    is already registered with the same username.
+    """
+
+    # Register a user:
+    client.get("/register/simon")
+
+    response = client.get("/register/simon")
+    assert b"Please choose another username" == response.data
 
 
 def test_users(client):
