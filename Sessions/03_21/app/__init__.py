@@ -22,7 +22,9 @@ def create_app(database_uri="sqlite:///app.db"):
     @app.route("/register/<usr>")
     def register(usr: str):
         # Check for registered user with same username:
-        # LOGIC
+        check = User.query.filter_by(username=usr).first()
+        if check:
+            return "Please choose another username."
         user = User(username=usr, password="please_change")
         db.session.add(user)
         db.session.commit()
